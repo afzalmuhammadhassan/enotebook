@@ -18,7 +18,6 @@ router.get("/api/note/:id", fetchUser, async (req, res) => {
   }
 });
 
-
 router.delete(
   "/api/note/deletenote/:id",
   fetchUser,
