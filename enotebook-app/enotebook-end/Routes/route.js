@@ -7,19 +7,19 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const fetchUser = require("../middleware/fetchUser");
 
-router.get("/", async (req, res) => {
+router.get("/api/auth", async (req, res) => {
   const data = await User.find().select("-password");
   res.status(200).json(data);
 });
 
-router.get("/getuser/",fetchUser, async (req, res) => {
+router.get("/api/auth/getuser/",fetchUser, async (req, res) => {
   const id = req.user.id;
   const user_1 = await User.findById(id).select("-password")
   res.status(200).json(user_1);
 });
 
 router.post(
-  "/login",
+  "/api/auth/login",
   [
     body("email", "Email is required field").notEmpty().isEmail(),
     body("password", "Password is required feild").notEmpty(),
@@ -57,7 +57,7 @@ router.post(
 );
 
 router.post(
-  "/createuser",
+  "/api/auth/createuser",
   [
     body("name", "Name is required field").notEmpty(),
     body("email", "Email is required field").notEmpty().isEmail(),
@@ -87,4 +87,5 @@ router.post(
     }
   }
 );
+
 module.exports = router;
