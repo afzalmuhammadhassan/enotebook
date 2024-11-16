@@ -7,7 +7,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const fetchUser = require("../middleware/fetchUser");
 
-router.get("/api/auth", async (req, res) => {
+router.get("/api/auth/", async (req, res) => {
   const data = await User.find().select("-password");
   res.status(200).json(data);
 });
