@@ -7,14 +7,14 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const fetchUser = require("../middleware/fetchUser");
 
-router.get("/api/auth", async (req, res) => {
+router.get("/api/auth/", async (req, res) => {
   const data = await User.find().select("-password");
   res.status(200).json(data);
 });
 
-router.get("/api/auth/getuser/",fetchUser, async (req, res) => {
+router.get("/api/auth/getuser/", fetchUser, async (req, res) => {
   const id = req.user.id;
-  const user_1 = await User.findById(id).select("-password")
+  const user_1 = await User.findById(id).select("-password");
   res.status(200).json(user_1);
 });
 
@@ -49,7 +49,7 @@ router.post(
         id: user_1.id,
       };
       const auth_token = await jwt.sign(data, process.env.JWT_SECRET);
-      res.status(200).send(auth_token);
+      res.status(200).json(auth_token);
     } catch (error) {
       res.status(500).send("Sorry, an internal error occured in serverr");
     }
@@ -81,7 +81,7 @@ router.post(
       };
       const auth_token = await jwt.sign(data, process.env.JWT_SECRET);
 
-      res.status(200).send(auth_token);
+      res.status(200).json(auth_token);
     } catch (error) {
       res.status(500).send("Sorry, an internal error occured in serverr");
     }

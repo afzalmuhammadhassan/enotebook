@@ -4,8 +4,14 @@ const fetchUser = require("../middleware/fetchUser");
 const router = express.Router();
 const Note = require("../models/Note");
 
-router.get("/api/note", (req, res) => {
-  res.status(200).send("Noets");
+router.get("/api/note/allnotes/", fetchUser, async (req, res) => {
+  try {
+    const id = req.user.id;
+    const note_1 = await Note.find({user:id});
+    res.status(200).send(note_1);
+  } catch (error) {
+    res.status(401).send("Sorry, an internal error occured in server");
+  }
 });
 
 router.get("/api/note/:id", fetchUser, async (req, res) => {
@@ -17,7 +23,6 @@ router.get("/api/note/:id", fetchUser, async (req, res) => {
     res.status(401).send("Sorry, an internal error occured in server");
   }
 });
-
 
 router.delete(
   "/api/note/deletenote/:id",
@@ -77,12 +82,13 @@ router.post(
   ],
   async (req, res) => {
     try {
+      console.log("after title");
+
       const result = validationResult(req);
       if (!result.isEmpty()) {
         return res.status(500).json(result);
       }
       const { title, description, tag } = req.body;
-      console.log("after title");
       const user = req.user.id;
       const note_1 = new Note({ title, description, tag, user });
       const save_result = await note_1.save();
