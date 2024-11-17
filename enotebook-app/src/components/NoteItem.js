@@ -7,7 +7,8 @@ export default function NoteItem(props) {
     deleteNote(id);
   };
   const modaldisplay = (note) => {
-    props.modal(note);
+    const data = props.modal(note);
+    console.log("data: ", data);
   };
   return (
     <div className="col-md-4 my-2">

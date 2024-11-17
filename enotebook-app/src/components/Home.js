@@ -1,19 +1,24 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import NoteItem from "./NoteItem";
-import NoteContext from "../contexts/noteContext";
 import AddNote from "./AddNote";
+import NoteContext from "../contexts/noteContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
   const modal_ref = useRef(null);
   const showModal = (eNote) => {
     const { id, title, description, tag } = eNote;
     setNote({ ...note, id, title, description, tag });
     modal_ref.current.click();
   };
-  const { items, getNotes } = useContext(NoteContext);
+  const { items, getNotes, setItems } = useContext(NoteContext);
   useEffect(() => {
+    if (!localStorage.getItem("auth-token")) {
+      console.log(localStorage.getItem("auth-token"));
+      navigate("/login");
+    }
     getNotes();
-    console.log(items);
   }, []);
   const [note, setNote] = useState({
     id: "",
@@ -24,9 +29,10 @@ export default function Home() {
   const { editNote } = useContext(NoteContext);
   const updateNote = (e) => {
     const { id, title, description, tag } = note;
-    console.log(note);
     e.preventDefault();
     editNote(id, title, description, tag);
+    console.log("note: ", note);
+    return note;
   };
   const handleChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
@@ -126,9 +132,10 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* <h1>Add new Item</h1>
-      <AddNote /> */}
-      {/* <h1 className="my-2">All Notes</h1> */}
+      <h1>Add new Item</h1>
+      <AddNote />
+      <h1 className="my-2">All Notes</h1>
+      {items.length === 0 && <h3>No Notes Found</h3>}
       <div className="row">
         {items.map((item) => {
           return (

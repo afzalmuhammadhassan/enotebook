@@ -18,27 +18,19 @@ const NoteState = (props) => {
           password,
         }),
       });
-      console.log("Data is not received yet");
-
-      const json = await res.json();
-      console.log(json);
     } catch (error) {}
   };
   const getNote = async () => {
     try {
-      console.log("GET NOTE");
       const url = "http://localhost:5000/api/note/67305bfd880445e1f3364064";
       const response = await fetch(url, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzc0NjkwODVjNWI4MmFiMjdkMGI5YyIsImlhdCI6MTczMTY3NTc5Mn0.GXLMwP-Mj4AgJgn3WT8YI9FpsEVITesFqj7P6Jx47wA",
+          "auth-token": localStorage.getItem("auth-token"),
         },
       });
       const json = await response.json();
-      console.log(json);
-      setItems(json);
     } catch (error) {
       console.log("Eroor: ", error);
     }
@@ -50,8 +42,7 @@ const NoteState = (props) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzc0NjkwODVjNWI4MmFiMjdkMGI5YyIsImlhdCI6MTczMTY3NTc5Mn0.GXLMwP-Mj4AgJgn3WT8YI9FpsEVITesFqj7P6Jx47wA",
+          "auth-token": localStorage.getItem("auth-token"),
         },
       });
       const json = await response.json();
@@ -82,40 +73,26 @@ const NoteState = (props) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzc0NjkwODVjNWI4MmFiMjdkMGI5YyIsImlhdCI6MTczMTY3NTc5Mn0.GXLMwP-Mj4AgJgn3WT8YI9FpsEVITesFqj7P6Jx47wA",
+          "auth-token": localStorage.getItem("auth-token"),
         },
         body: JSON.stringify({ title, description, tag }),
       });
-      const json = response.json();
     } catch (error) {
       console.log(error);
     }
   };
   const editNote = async (id, title, description, tag) => {
     const url = `http://localhost:5000/api/note/updatenote/${id}`;
-    console.log("id: ", id);
     try {
       const response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzc0NjkwODVjNWI4MmFiMjdkMGI5YyIsImlhdCI6MTczMTY3NTc5Mn0.GXLMwP-Mj4AgJgn3WT8YI9FpsEVITesFqj7P6Jx47wA",
+          "auth-token": localStorage.getItem("auth-token"),
         },
         body: JSON.stringify({ title, description, tag }),
       });
       const json = response.json();
-      for (let index = 0; index < items.length; index++) {
-        let element = items[index];
-        if (element.id === id) {
-          element.title = title;
-          element.description = description;
-          element.tag = tag;
-          break;
-        }
-      }
-      setItems(items);
     } catch (error) {
       console.log(error);
     }
